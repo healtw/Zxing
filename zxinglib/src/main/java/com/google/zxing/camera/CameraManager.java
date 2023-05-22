@@ -248,6 +248,7 @@ public final class CameraManager {
 	 * 
 	 * @return The rectangle to draw on screen in window coordinates.
 	 */
+/**
 	public synchronized Rect getFramingRect() {
 		if (framingRect == null) {
 			if (camera == null) {
@@ -274,6 +275,38 @@ public final class CameraManager {
 
 		return framingRect;
 	}
+**/
+//add  by carel for yi si wu ling
+
+    public synchronized Rect getFramingRect() {
+        if (framingRect == null) {
+            if (camera == null) {
+                return null;
+            }
+            Point screenResolution = configManager.getScreenResolution();
+            if (screenResolution == null) {
+                // Called early, before init even finished
+                return null;
+            }
+ 
+            //  DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+ 
+            int width = findDesiredDimensionInRange(screenResolution.x, MIN_FRAME_WIDTH, MAX_FRAME_WIDTH);
+            int height = screenResolution.y / 2;
+            float percentage = (float) screenResolution.y / (float) screenResolution.x;
+            if (percentage > 2)
+            {
+                //解决percentage>2 ，width超出屏幕，抛出异常("Crop rectangle does not fit within image data.");
+                height = screenResolution.x * 4 / 5;
+            }
+            width = height;
+            int leftOffset = (screenResolution.x - width) / 2;
+            int topOffset = (screenResolution.y - height) / 2 - 80;
+            framingRect = new Rect(leftOffset, topOffset, leftOffset + width, topOffset + height);
+            Log.d(TAG, "Calculated framing rect2: " + framingRect);
+        }
+        return framingRect;
+    }
 
 	/**
 	 * Target 5/8 of each dimension<br/>
