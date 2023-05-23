@@ -169,9 +169,7 @@ final class CameraConfigurationManager {
 			cameraResolution.y = afterSize.height;
 		}
 
-		//camera.setDisplayOrientation(90);
-        //1450 解决横屏问题
-        camera.setDisplayOrientation();
+		camera.setDisplayOrientation(90);
 	}
 
 	Point getCameraResolution() {
